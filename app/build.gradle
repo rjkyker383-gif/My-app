@@ -13,6 +13,7 @@ android {
         targetSdkVersion 33
         versionCode 1
         versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
@@ -23,8 +24,23 @@ android {
     }
 }
 
+repositories {
+    // Ensure mavenCentral is available for Shizuku and Timber
+    google()
+    mavenCentral()
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
     implementation "androidx.appcompat:appcompat:1.6.1"
     implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    // Shizuku API (latest stable)
+    implementation "moe.shizuku:api:13.6.0"
+
+    // Timber for logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
+    // Test
+    testImplementation 'junit:junit:4.13.2'
 }

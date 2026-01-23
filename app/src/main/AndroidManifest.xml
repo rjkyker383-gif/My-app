@@ -2,6 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.phxshizukudominator">
 
+    <!-- Declare RECEIVE_BOOT_COMPLETED so the system can deliver BOOT_COMPLETED -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Declare WRITE_SECURE_SETTINGS (privileged); it must be granted by the system or via Shizuku -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
+
     <application
         android:label="PHX Shizuku Dominator"
         android:icon="@mipmap/ic_launcher">
@@ -14,10 +19,11 @@
             </intent-filter>
         </activity>
 
+        <!-- Receiver must be exported=true for BOOT_COMPLETED broadcast -->
         <receiver
             android:name=".BootReceiver"
             android:enabled="true"
-            android:exported="false">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>

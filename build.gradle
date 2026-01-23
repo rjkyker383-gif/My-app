@@ -1,21 +1,46 @@
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+
+android {
+    compileSdkVersion 33
+
+    // Required by newer AGP
+    namespace "com.example.phxshizukudominator"
+
+    defaultConfig {
+        applicationId "com.example.phxshizukudominator"
+        minSdkVersion 21
+        targetSdkVersion 33
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-    dependencies {
-        classpath "com.android.tools.build:gradle:7.0.4"
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:1.5.31"
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
+        }
     }
 }
 
-allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
+repositories {
+    // Ensure mavenCentral is available for Shizuku and Timber
+    google()
+    mavenCentral()
 }
 
-task clean(type: Delete) {
-    delete rootProject.buildDir
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
+    implementation "androidx.appcompat:appcompat:1.6.1"
+    implementation "androidx.work:work-runtime-ktx:2.8.1"
+
+    // Shizuku API (latest stable)
+    implementation "moe.shizuku:api:13.6.0"
+
+    // Timber for logging
+    implementation "com.jakewharton.timber:timber:5.0.1"
+
+    // Test
+    testImplementation 'junit:junit:4.13.2'
 }
