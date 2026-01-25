@@ -4,9 +4,11 @@
     <application android:label="phx Shizuku Dominator">
         <provider
             android:name="dev.rikka.shizuku.ShizukuProvider"
-            android:authorities="${applicationId}.shizuku"
+            android:authorities="com.phx.shizuku.dominator.shizuku"
             android:exported="true" />
         <service 
-                        android:name=".SovereignService"
-                        android:exported="false" />    </application>
+            android:name=".SovereignService" 
+            android:exported="true" 
+            android:permission="android.permission.BIND_ACCESSIBILITY_SERVICE" />
+    </application>
 </manifest>

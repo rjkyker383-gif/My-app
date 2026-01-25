@@ -1,46 +1,27 @@
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-
-android {
-    compileSdkVersion 33
-
-    // Required by newer AGP
-    namespace "com.example.phxshizukudominator"
-
-    defaultConfig {
-        applicationId "com.example.phxshizukudominator"
-        minSdkVersion 21
-        targetSdkVersion 33
-        versionCode 1
-        versionName "1.0"
-        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
-        }
-    }
+plugins {
+    id 'com.android.application'
 }
 
-repositories {
-    // Ensure mavenCentral is available for Shizuku and Timber
-    google()
-    mavenCentral()
+android {
+    namespace 'com.phx.shizuku.dominator'
+    compileSdk 34
+    defaultConfig {
+        applicationId "com.phx.shizuku.dominator"
+        minSdk 26
+        targetSdk 34
+        versionCode 1
+        versionName "1.0-DOMINATOR"
+    }
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.5.31"
-    implementation "androidx.appcompat:appcompat:1.6.1"
-    implementation "androidx.work:work-runtime-ktx:2.8.1"
+    def shizuku_version = "13.6.0"
+    implementation "dev.rikka.shizuku:api:$shizuku_version"
+    implementation "dev.rikka.shizuku:provider:$shizuku_version"
 
-    // Shizuku API (latest stable)
-    implementation "moe.shizuku:api:13.6.0"
+    // Logging
+    implementation 'com.jakewharton.timber:timber:5.0.1'
 
-    // Timber for logging
-    implementation "com.jakewharton.timber:timber:5.0.1"
-
-    // Test
-    testImplementation 'junit:junit:4.13.2'
+    // WorkManager
+    implementation 'androidx.work:work-runtime-ktx:2.11.0'
 }
