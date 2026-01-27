@@ -100,7 +100,7 @@ class ShizukuWorker(
 
     private fun createForegroundInfo(text: String): ForegroundInfo {
         val channel = NotificationChannel(
-            NOTIF_CHANNEL_CHANNEL_ID,
+            NOTIF_CHANNEL_ID,
             "PHX Shizuku Worker",
             NotificationManager.IMPORTANCE_LOW
         )
