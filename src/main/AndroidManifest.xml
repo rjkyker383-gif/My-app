@@ -1,28 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.phxshizukudominator">
 
-    <uses-permission android:name="moe.shizuku.manager.permission.API_V23" />
+    <!-- Declare RECEIVE_BOOT_COMPLETED so the system can deliver BOOT_COMPLETED -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <!-- Declare WRITE_SECURE_SETTINGS (privileged); it must be granted by the system or via Shizuku -->
+    <uses-permission android:name="android.permission.WRITE_SECURE_SETTINGS" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
         android:label="PHX Shizuku Dominator"
-        android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="true"
-        android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-
-        <activity android:name=".MainActivity">
+        android:icon="@mipmap/ic_launcher">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <receiver android:name=".BootReceiver" android:enabled="true" android:exported="true">
+        <!-- Receiver must be exported=true for BOOT_COMPLETED broadcast -->
+        <receiver
+            android:name=".BootReceiver"
+            android:enabled="true"
+            android:exported="true">
             <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver>
     </application>
+
 </manifest>
