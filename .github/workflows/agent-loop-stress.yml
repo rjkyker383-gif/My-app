@@ -1,0 +1,33 @@
+name: Agent Loop Stress
+
+on:
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'agent-loop/**'
+      - '.github/workflows/agent-loop-stress.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  stress:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run 10x100 durability stress test
+        working-directory: agent-loop
+        env:
+          STRESS_WORKERS: '10'
+          STRESS_CYCLES: '100'
+        run: npm run test:stress
