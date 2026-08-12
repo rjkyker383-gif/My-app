@@ -1,6 +1,8 @@
 package com.phx.shizuku.dominator
 
+import android.Manifest
 import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
@@ -11,7 +13,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import moe.shizuku.api.Shizuku
 import timber.log.Timber
-import com.phx.shizuku.dominator.ShizukuWorker // Corrected import
 
 class MainActivity : AppCompatActivity() {
 
@@ -22,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var statusTextView: TextView
 
     private val REQUEST_CODE_SHIZUKU_PERMISSION = 100
+    private val REQUEST_CODE_NOTIFICATION_PERMISSION = 101
 
     private val binderReceivedListener = Shizuku.OnBinderReceivedListener {
         Timber.d("Shizuku binder received")
@@ -74,6 +76,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         updateShizukuStatus()
+        requestNotificationPermissionIfNeeded()
     }
 
     override fun onDestroy() {
@@ -82,10 +85,40 @@ class MainActivity : AppCompatActivity() {
         Shizuku.removeBinderDeadListener(binderDeadListener)
         Shizuku.removeRequestPermissionResultListener(requestPermissionResultListener)
     }
-    
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == REQUEST_CODE_NOTIFICATION_PERMISSION) {
+            val granted = grantResults.isNotEmpty() &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+            if (granted) {
+                Timber.d("Notification permission granted")
+            } else {
+                Timber.w("Notification permission denied")
+            }
+            return
+        }
+
         Shizuku.onRequestPermissionsResult(requestCode, permissions, grantResults)
+    }
+
+    private fun requestNotificationPermissionIfNeeded() {
+        if (
+            Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) !=
+                PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(
+                arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                REQUEST_CODE_NOTIFICATION_PERMISSION
+            )
+        }
     }
 
     private fun updateShizukuStatus() {
@@ -109,10 +142,12 @@ class MainActivity : AppCompatActivity() {
     private fun startSetPropertyWorker(key: String, value: String) {
         statusTextView.text = "Enqueuing worker to set '$key' to '$value'"
         val workRequest = OneTimeWorkRequestBuilder<ShizukuWorker>()
-            .setInputData(Data.Builder()
-                .putString("key", key)
-                .putString("value", value)
-                .build())
+            .setInputData(
+                Data.Builder()
+                    .putString("key", key)
+                    .putString("value", value)
+                    .build()
+            )
             .build()
         WorkManager.getInstance(this).enqueue(workRequest)
     }
