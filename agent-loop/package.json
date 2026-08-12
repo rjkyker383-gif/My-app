@@ -1,0 +1,9 @@
+{
+  "name": "my-app-agent-loop",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=22.13.0" },
+  "scripts": {
+    "test:stress": "node src/stress-test.mjs"
+  }
+}
