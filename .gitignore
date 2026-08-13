@@ -1,3 +1,12 @@
 .gemini/
 gha-creds-*.json
 nohup.out
+.env
+.env.*
+!.env.example
+.relay-state/
+*.sqlite
+*.sqlite-shm
+*.sqlite-wal
+__pycache__/
+*.pyc

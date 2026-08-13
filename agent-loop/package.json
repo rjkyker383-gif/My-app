@@ -4,6 +4,8 @@
   "type": "module",
   "engines": { "node": ">=22.13.0" },
   "scripts": {
-    "test:stress": "node src/stress-test.mjs"
+    "test:stress": "node src/stress-test.mjs",
+    "test:lease": "node src/lease-checkpoint-test.mjs",
+    "test:all": "npm run test:lease && npm run test:stress"
   }
 }
